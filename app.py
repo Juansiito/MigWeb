@@ -22,6 +22,7 @@ from sqlalchemy import func
 from flask_sqlalchemy import SQLAlchemy
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
+import os
 
 def generar_password():
     return ''.join(random.choices(string.ascii_letters + string.digits, k=10))
@@ -1980,4 +1981,8 @@ def obtener_siguiente_codigo(id_grupo):
         return jsonify({'error': 'Error al generar el código'}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Configuración para desarrollo local
+    app.run(host='0.0.0.0', port=5000, debug=True)
+else:
+    # Configuración para producción
+    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', default=5000)))
